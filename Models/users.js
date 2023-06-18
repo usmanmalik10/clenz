@@ -4,10 +4,7 @@ const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
     username:
     {
-        type: String
-    },
-    adress: {
-        type: String
+        type: String,
     },
     email:
     {
@@ -20,29 +17,12 @@ const userSchema = mongoose.Schema({
         select: false,
         min: 8
     },
-    followers: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'users'
-    }],
-    following: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'users'
-    }],
-    favouritNews: [{
-        type: mongoose.Schema.Types.ObjectId, ref: 'newsFeeds',
-        default:""
-    }],
-    // categories: [{
-    //     type: mongoose.Schema.Types.ObjectId, ref: 'newsFeeds'
-    // }],
-    otp:
-    {
+    role:{
         type: String,
-        default: "",
-        select: false,
-        createdAt: { type: Date, expires: '5m', default: Date.now }
+        default: "user"
     },
-    verifiedUsers: {
-        type: Boolean,
-        default: false
+    token:{
+        type: String
     },
     createdAt:
     {
@@ -51,5 +31,5 @@ const userSchema = mongoose.Schema({
     },
 });
 //user Model
-module.exports = mongoose.model('users', userSchema);
+module.exports = mongoose.model('user', userSchema);
 
