@@ -8,8 +8,8 @@ async function sendMailer(email, otpcode) {
             service: 'gmail',
             // host: 'smtp.gmail.com',
             auth: {
-                user: "ciitlahore383@gmail.com", // generated ethereal user
-                pass: "Abubaker@1234", // generated ethereal password
+                user: "", // generated ethereal user
+                pass: "", // generated ethereal password
             },
         }));
         let info = await transporter.sendMail({

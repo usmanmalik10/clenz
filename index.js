@@ -4,7 +4,7 @@ const bodyparser = require('body-parser');
 
 const dbconnection = require('./Database');
 const userRouter = require('./Routes/user');
-const slots = require('./Routes/order')
+const order = require('./Routes/order')
 
 
 const port = process.env.PORT
@@ -20,7 +20,7 @@ dbconnection();
 
 
 app.use('/user', userRouter);
-app.use('/order', slots)
+app.use('/order', order)
 
 app.listen(port || 4000, () => {
     console.log('your server runing at:' + port);

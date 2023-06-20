@@ -1,9 +1,9 @@
 const mongoose = require('mongoose');
 
 const orderSchema = mongoose.Schema({
-    username:
-    {
-        type: String
+    userId:{
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
     },
     service:
     {
@@ -12,9 +12,6 @@ const orderSchema = mongoose.Schema({
     date:
     {
         type: Date
-    },
-    time: {
-        type: String
     },
     price:{
         type: Number
@@ -26,6 +23,7 @@ const orderSchema = mongoose.Schema({
     venu:{
         type: String
     },
+    
 });
-module.exports = mongoose.model('order', orderSchema);
+module.exports = mongoose.model('Order', orderSchema);
 
