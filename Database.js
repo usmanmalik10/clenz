@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 
 const dbconnection = (req, res) => {
     try {
-        mongoose.connect(process.env.DB_CONNECTION,
+        mongoose.connect("mongodb+srv://huzairmehmood110:qOdlK2JvkXLV7f0h@cluster0.s0hmmxb.mongodb.net/salon?retryWrites=true&w=majority",
             { useNewUrlParser: true, useUnifiedTopology: true });
         console.log('Data Base connection successfull...');
     } catch (error) {

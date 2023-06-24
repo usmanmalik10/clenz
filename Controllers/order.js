@@ -103,7 +103,7 @@ exports.getAllpending = async (req, res) => {
 
 exports.getAvailableSlots = async (req, res) => {
   try {
-   const data = await getAvailabilitySlotsForMonth(2023, 6)
+   const data = await getAvailabilitySlotsForMonth(req.params.year, req.params.month)
    res.status(200).json({
     message:"available slots",
     data

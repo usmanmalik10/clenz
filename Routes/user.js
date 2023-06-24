@@ -4,8 +4,8 @@ const { addUserInfo, getUserById, getAllUser, userlogin, deleteUser } = require(
 const router = express.Router();
 
 router.post('/register', addUserInfo);
-router.post('/getUserbyid', auth, getUserById);
-router.get('/getallusers', auth, getAllUser);
+router.post('/getUserbyid', getUserById);
+router.get('/getallusers', getAllUser);
 router.post('/login', userlogin);
 router.post('/deletuser', auth, deleteUser)
 

@@ -5,10 +5,6 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 const { findOne, findOneAndUpdate } = require('../Models/users');
 
-
-
-
-// Add user 
 exports.addUserInfo = async (req, res) => {
     try {
         const { username, email, password} = req.body;
@@ -30,7 +26,7 @@ exports.addUserInfo = async (req, res) => {
             })
         }
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
             Error_Message: error
         })
     }

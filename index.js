@@ -23,5 +23,5 @@ app.use('/user', userRouter);
 app.use('/order', order)
 
 app.listen(port || 4000, () => {
-    console.log('your server runing at:' + port);
+    console.log('your server runing at:' + 4000);
 });

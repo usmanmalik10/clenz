@@ -5,8 +5,8 @@ const router = express.Router();
 
 router.post('/book-order', bookOrder)
 router.post('/booknow',bookConfirm)
-router.get('/getslots', getAvailableSlots)
-router.get('/getpending', auth, getAllpending)
+router.get('/getslots/:year/:month', getAvailableSlots)
+router.get('/getpending', getAllpending)
 router.get('/getcompleted', auth, getAllCompleted)
 router.patch('/update-status/:orderId', auth, upDateOrderStatus)
 
