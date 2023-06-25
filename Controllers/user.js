@@ -31,27 +31,7 @@ exports.addUserInfo = async (req, res) => {
         })
     }
 };
-// Find user by Id
-exports.getUserById = async (req, res) => {
-    try {
-        let data = await User.findOne({ _id: req.body._id }).populate('followers').populate('following').populate('favouritNews');
-        if (data?.verifiedUsers === true) {
-            res.status(200).json({
-                message: 'User are here',
-                data
-            })
-        } else {
-            res.status(400).json({
-                message: 'no content'
-            })
-        }
-    } catch (error) {
-        console.log(error);
-        res.status(400).json({
-            Error_Message: error
-        })
-    }
-};
+
 // Find All Users
 exports.getAllUser = async (req, res) => {
     try {
