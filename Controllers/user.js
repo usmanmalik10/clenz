@@ -7,12 +7,19 @@ const { findOne, findOneAndUpdate, find } = require('../Models/users');
 
 exports.addUserInfo = async (req, res) => {
     try {
-        const { username, email, password} = req.body;
-        if (req.body.email) {
-            const hasedpassword = await bcrypt.hashSync(req.body.password, 10)
-            const data = await User.create({
+        const { username, email, password, phone, address} = req.body;
+        let duplication = await User.findOne({email: email})
+        if (duplication) {
+            res.status(401).json({
+                message:"email already exist"
+            })
+        } else {
+                const hasedpassword = await bcrypt.hashSync(req.body.password, 10)
+                const data = await User.create({
                 username,
                 email,
+                phone, 
+                address,
                 password: hasedpassword,
             })
             data.save();
@@ -20,11 +27,9 @@ exports.addUserInfo = async (req, res) => {
                 message: 'user added',
                 data
             })
-        } else {
-            res.status(400).json({
-                message: 'No Content'
-            })
         }
+        
+            
     } catch (error) {
         res.status(500).json({
             Error_Message: error
