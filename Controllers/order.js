@@ -5,7 +5,7 @@ const sendMailer = require("../utility/mailer");
 
 exports.bookOrder = async (req, res) => {
   try {
-    const { username, service, date, time, price, status, venu } = req.body;
+    const { username, service, date, time, price, status, venu, slotNumber } = req.body;
     if (req.body) {
       const data = await Order.create({
         username,
@@ -13,13 +13,31 @@ exports.bookOrder = async (req, res) => {
         date,
         time,
         price,
-        status,
+        status: 'pending',
         venu,
       });
       data.save();
+      console.log('dat', data);
+      if (data) {
+        const slot = await Slot.create({
+          orderId : data._id,
+          date: date,
+          slotNumber: slotNumber,
+          isAvailable: false
+        })
+        console.log('slot', slot);
+        await slot.save()
+        let booking = await Booking.create({
+          slotId: slot._id,
+          date:date,
+        })
+        booking.save()
+        console.log('booking',booking );
+      }
       return res.status(200).json({
         message: "order confirm",
-        data,
+        data:data, 
+        slotNumber :slot.slotNumber ,
       });
     } else {
       res.status(400).json({
