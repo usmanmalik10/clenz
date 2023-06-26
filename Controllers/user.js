@@ -3,7 +3,7 @@ const sendMailer = require('../utility/mailer');
 const auth = require('../utility/auth');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const { findOne, findOneAndUpdate } = require('../Models/users');
+const { findOne, findOneAndUpdate, find } = require('../Models/users');
 
 exports.addUserInfo = async (req, res) => {
     try {
@@ -35,19 +35,19 @@ exports.addUserInfo = async (req, res) => {
 // Find All Users
 exports.getAllUser = async (req, res) => {
     try {
-        let data = await User.find({ verifiedUsers: true }).populate('followers').populate('following')
-        if (data) {
+        let data = await User.find({role: 'user'});
+        if(data) {
             res.status(200).json({
                 message: 'Users are here',
                 data
             })
         } else {
-            res.status(400).json({
+            res.status(404).json({
                 message: 'no content'
             })
         }
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
             Error_Message: error
         })
     }
@@ -56,7 +56,7 @@ exports.getAllUser = async (req, res) => {
 exports.userlogin = async (req, res) => {
     const { email, password } = req.body
     try {
-        let data = await User.findOne({ email: email }).select('password email')
+        let data = await User.findOne({ email: email }).select('password email role phone address')
         if ( data ) {
             const isMatch = await bcrypt.compare(password, data.password);
             if (isMatch) {
@@ -71,10 +71,7 @@ exports.userlogin = async (req, res) => {
                 );
                 res.status(200).json({
                     message: "login successfull",
-                    data: {
-                        email:data.email,
-                        role:data.role
-                    },
+                    data: data,
                     token
                 })
             } else {
@@ -94,6 +91,25 @@ exports.userlogin = async (req, res) => {
         })
     }
 };
+exports.getUserByid = async (req, res) => {
+    try {
+        const data = await User.findById({_id: req.params.userId})
+        if(data) {
+            res.status(200).json({
+                message:"user data",
+                data
+            })
+        } else {
+            res.status(404).json({
+                message:"data not found"
+            })
+        }
+    } catch (e) {
+        res.status(500).json({
+            Error_Message: e
+        })
+    }
+}
 // Update User Info
 exports.EditUserInfo = async (req, res) => {
     try {
