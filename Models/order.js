@@ -19,10 +19,7 @@ const orderSchema = mongoose.Schema({
     status:
     {
         type: String,
-    },
-    venu:{
-        type: String
-    },
+    }
     
 });
 module.exports = mongoose.model('Order', orderSchema);
