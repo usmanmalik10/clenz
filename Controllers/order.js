@@ -1,11 +1,11 @@
 const Order = require("../Models/order");
-const Slot = require("../Models/slots")
+const Slot = require("../Models/slots");
 const Booking = require("../Models/booking");
 const sendMailer = require("../utility/mailer");
 
 exports.bookOrder = async (req, res) => {
   try {
-    const {userId, service, date, time, price,  slotNumber } = req.body;
+    const { userId, service, date, time, price, slotNumber } = req.body;
     if (req.body) {
       const data = await Order.create({
         userId,
@@ -13,26 +13,26 @@ exports.bookOrder = async (req, res) => {
         date,
         time,
         price,
-        status: 'pending',
+        status: "pending",
       });
       data.save();
       if (data) {
         const slot = await Slot.create({
-          orderId : data._id,
+          orderId: data._id,
           date: date,
           slotNumber: slotNumber,
-          isAvailable: false
-        })
-        await slot.save()
+          isAvailable: false,
+        });
+        await slot.save();
         let booking = await Booking.create({
           slotId: slot._id,
-          date:date,
-        })
-        booking.save()
+          date: date,
+        });
+        booking.save();
       }
-        res.status(200).json({
+      res.status(200).json({
         message: "order confirm",
-        data:data      
+        data: data,
       });
     } else {
       res.status(400).json({
@@ -48,47 +48,57 @@ exports.bookOrder = async (req, res) => {
 
 exports.bookConfirm = async (req, res) => {
   try {
-    const data =  await Slot.create({
-      orderId : req.body.orderId,
+    const data = await Slot.create({
+      orderId: req.body.orderId,
       date: req.body.date,
       slotNumber: req.body.slotNumber,
-      isAvailable: false
-    })
-    await data.save()
+      isAvailable: false,
+    });
+    await data.save();
     let booking;
     console.log("data", data);
     if (data) {
-        booking = await Booking.create({
+      booking = await Booking.create({
         slotId: data._id,
         date: req.body.date,
-      })
+      });
     }
     console.log(booking);
-    if( data && booking) {
+    if (data && booking) {
       res.status(200).json({
         status: true,
-        message:"booking confirm",
-        data
-      })
+        message: "booking confirm",
+        data,
+      });
     }
-
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 exports.getAllCompleted = async (req, res) => {
   try {
-    const slots = await Order.find({ status: "completed" });
+    const slots = await Order.aggregate([
+      {
+        $match: { status: "completed" },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+    ]);
     if (slots) {
       res.status(200).json({
-        message: "slots are available",
+        message: "all Completed orders",
         slots: slots,
-        count: slots.length,
       });
     } else {
       res.status(400).json({
-        message: "slots are not available",
+        message: "somthing wents wrong",
       });
     }
   } catch (error) {
@@ -98,15 +108,27 @@ exports.getAllCompleted = async (req, res) => {
 
 exports.getAllpending = async (req, res) => {
   try {
-    const slots = await Order.find({ status: "pending" });
+    let slots = await Order.aggregate([
+      {
+        $match: { status: "pending" },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "userId",
+          foreignField: "_id",
+          as: "user",
+        },
+      },
+    ]);
     if (slots) {
       res.status(200).json({
-        message: "slots are available",
+        message: "All pending order",
         slots: slots,
       });
     } else {
       res.status(400).json({
-        message: "slots are not available",
+        message: "something wenst wrong",
       });
     }
   } catch (error) {
@@ -116,11 +138,14 @@ exports.getAllpending = async (req, res) => {
 
 exports.getAvailableSlots = async (req, res) => {
   try {
-   const data = await getAvailabilitySlotsForMonth(req.params.year, req.params.month)
-   res.status(200).json({
-    message:"available slots",
-    data
-   })
+    const data = await getAvailabilitySlotsForMonth(
+      req.params.year,
+      req.params.month
+    );
+    res.status(200).json({
+      message: "available slots",
+      data,
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -128,17 +153,19 @@ exports.getAvailableSlots = async (req, res) => {
 
 exports.upDateOrderStatus = async (req, res) => {
   try {
-    const data = await Order.findOneAndUpdate({ _id: req.params.orderId },
-      { $set: { status: 'completed'} },
-      { returnOriginal: false })
-      res.status(200).json({
-        status: true,
-        message:"success"
-      })
+    const data = await Order.findOneAndUpdate(
+      { _id: req.params.orderId },
+      { $set: { status: "completed" } },
+      { returnOriginal: false }
+    );
+    res.status(200).json({
+      status: true,
+      message: "success",
+    });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 async function getAvailabilitySlotsForMonth(year, month) {
   const startDate = new Date(year, month - 1, 1); // Set the start date to the first day of the month
@@ -154,7 +181,9 @@ async function getAvailabilitySlotsForMonth(year, month) {
   // Initialize all slots as unavailable for each day
   const daysInMonth = endDate.getDate();
   for (let day = 1; day <= daysInMonth; day++) {
-    const dateKey = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    const dateKey = `${year}-${month.toString().padStart(2, "0")}-${day
+      .toString()
+      .padStart(2, "0")}`;
     availabilitySlots[dateKey] = Array.from({ length: 8 }, (_, index) => ({
       slotNumber: index + 1,
       isAvailable: false,

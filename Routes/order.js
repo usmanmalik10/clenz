@@ -7,7 +7,7 @@ router.post('/book-order', bookOrder)
 // router.post('/booknow',bookConfirm)
 router.get('/getslots/:year/:month', getAvailableSlots)
 router.get('/getpending', getAllpending)
-router.get('/getcompleted', auth, getAllCompleted)
+router.get('/getcompleted', getAllCompleted)
 router.patch('/update-status/:orderId', auth, upDateOrderStatus)
 
 
