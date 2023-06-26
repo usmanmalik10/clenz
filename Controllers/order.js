@@ -17,18 +17,18 @@ exports.bookOrder = async (req, res) => {
       });
       data.save();
       if (data) {
-        const slot = await Slot.create({
-          orderId: data._id,
-          date: date,
-          slotNumber: slotNumber,
-          isAvailable: false,
-        });
-        await slot.save();
-        let booking = await Booking.create({
-          slotId: slot._id,
-          date: date,
-        });
-        booking.save();
+        // const slot = await Slot.create({
+        //   orderId: data._id,
+        //   date: date,
+        //   slotNumber: slotNumber,
+        //   isAvailable: false,
+        // });
+        // await slot.save();
+        // let booking = await Booking.create({
+        //   slotId: slot._id,
+        //   date: date,
+        // });
+        // booking.save();
       }
       res.status(200).json({
         message: "order confirm",
