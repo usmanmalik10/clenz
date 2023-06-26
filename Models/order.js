@@ -13,6 +13,9 @@ const orderSchema = mongoose.Schema({
     {
         type: Date
     },
+    time:{
+        type: String
+    }, 
     price:{
         type: Number
     },
