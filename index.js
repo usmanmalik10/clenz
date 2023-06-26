@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+var cors = require('cors')
 const bodyparser = require('body-parser');
 
 const dbconnection = require('./Database');
@@ -10,8 +11,9 @@ const order = require('./Routes/order')
 const port = process.env.PORT
 
 
-
 const app = express();
+app.use(cors())
+
 app.use(express.json());
 
 
