@@ -6,13 +6,18 @@ const sendMailer = require("../utility/mailer");
 exports.bookOrder = async (req, res) => {
   try {
     const { userId, service, date, time, price, slotNumber } = req.body;
+    console.log('service', service);
+    console.log('price', price);
+    console.log('JSON.stringify(service)', JSON.stringify(service));
+    console.log('JSON.stringify(price)', JSON.stringify(price));
+
     if (req.body) {
       const data = await Order.create({
         userId,
-        service,
+        service: JSON.stringify(service),
         date,
         time,
-        price,
+        price:JSON.stringify(price),
         status: "pending",
       });
       data.save();
