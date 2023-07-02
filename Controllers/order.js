@@ -170,6 +170,22 @@ exports.upDateOrderStatus = async (req, res) => {
   }
 };
 
+
+exports.getCount = async (req, res) => {
+  try {
+    const pending = await Order.count({status: 'pending'})
+    const completed = await Order.count({status: 'completed'})
+
+    res.status(200).json({
+      completed: completed,
+      pending: pending,
+      total: completed + pending
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
 async function getAvailabilitySlotsForMonth(year, month) {
   const startDate = new Date(year, month - 1, 1); // Set the start date to the first day of the month
   const endDate = new Date(year, month, 0); // Set the end date to the last day of the month
