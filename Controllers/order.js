@@ -93,6 +93,9 @@ exports.getAllCompleted = async (req, res) => {
           as: "user",
         },
       },
+      {
+        $unwind: '$user'
+      }
     ]);
     if (slots) {
       res.status(200).json({
@@ -123,6 +126,9 @@ exports.getAllpending = async (req, res) => {
           as: "user",
         },
       },
+      {
+        $unwind: '$user'
+      }
     ]);
     if (slots) {
       res.status(200).json({
