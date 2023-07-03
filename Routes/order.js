@@ -9,7 +9,7 @@ router.get('/getslots/:year/:month', getAvailableSlots)
 router.get('/getpending', getAllpending)
 router.get('/getcompleted', getAllCompleted)
 router.get('/getcount', getCount)
-router.patch('/update-status/:orderId', auth, upDateOrderStatus)
+router.patch('/update-status/:orderId', upDateOrderStatus)
 
 
 
