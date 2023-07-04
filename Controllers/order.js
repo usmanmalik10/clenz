@@ -6,6 +6,11 @@ const sendMailer = require("../utility/mailer");
 exports.bookOrder = async (req, res) => {
   try {
     const { userId, service, date, time, price, slotNumber } = req.body;
+    if(!userId) {
+      return res.status(401).json({
+        message:'you are unauthorized for this request'
+      })
+    }
   
     if (req.body) {
       const data = await Order.create({
