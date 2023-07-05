@@ -13,7 +13,7 @@ const port = process.env.PORT
 
 const app = express();
 app.use(cors({
-    origin: '*',
+    origin: ['*', 'https://www.clenzspaandsaloon.com'],
     methods: ['POST', 'PUT', 'PATCH', 'GET', 'DELETE', 'OPTIONS'],
     allowedHeaders: '*'
   }));
