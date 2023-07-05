@@ -18,6 +18,11 @@ app.use(cors({
     allowedHeaders: '*'
   }));
 
+app.use(function(req, res, next) {
+  res.setHeader('Content-Security-Policy', 'upgrade-insecure-requests');
+  next();
+});
+
 app.use(express.json());
 
 
